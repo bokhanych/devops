@@ -1,0 +1,52 @@
+erver|
+    server.vm.box = "centos/7"
+    server.vm.hostname="server"
+    server.vm.network "private_network", ip: "192.168.168.101"
+    server.vm.provision "shell", inline: <<-SHELL
+    sudo yum update -y;
+    sudo timedatectl set-timezone Europe/Moscow;
+    yum install epel-release -y;
+    sudo yum install ntp -y;
+    cat /dev/null > /etc/ntp.conf;
+    sudo echo "driftfile /var/lib/ntp/drift" >> /etc/ntp.conf;
+    sudo echo "restrict default nomodify notrap nopeer noquery" >> /etc/ntp.conf;
+    sudo echo "restrict 192.168.168.0 mask 255.255.255.0" >> /etc/ntp.conf;
+    sudo echo "restrict 127.0.0.1" >> /etc/ntp.conf;
+    sudo echo "restrict ::1" >> /etc/ntp.conf;
+    sudo echo "server 0.centos.pool.ntp.org iburst" >> /etc/ntp.conf;
+    sudo echo "server 1.centos.pool.ntp.org iburst" >> /etc/ntp.conf;
+    sudo echo "server 2.centos.pool.ntp.org iburst" >> /etc/ntp.conf;
+    sudo echo "server 3.centos.pool.ntp.org iburst" >> /etc/ntp.conf;
+    sudo echo "disable monitor" >> /etc/ntp.conf;
+    sudo echo "logfile /var/log/ntp.log" >> /etc/ntp.conf;
+    sudo systemctl start ntpd && sudo systemctl enable ntpd;
+    SHELL
+    server.vm.provider "virtualbox" do |vb|
+      vb.customize ["modifyvm", :id, "--name", "server"]
+      vb.customize ["modifyvm", :id, "--memory", "1024"]
+    end
+  end
+ 
+  config.vm.define "client" do |client|
+    client.vm.box = "centos/7"
+    client.vm.hostname="client"
+    client.vm.network "private_network", ip: "192.168.168.102"
+  client.vm.provider "virtualbox" do |vb|
+      vb.customize ["modifyvm", :id, "--name", "client"]
+      vb.customize ["modifyvm", :id, "--memory", "1024"]
+    end
+    client.vm.provision "shell", inline: <<-SHELL
+  sudo yum update -y
+  timedatectl set-timezone Europe/Moscow;
+  yum install epel-release -y;
+  sudo yum install nginx -y
+  sudo systemctl start nginx && sudo systemctl enable nginx
+  sudo yum install ntp -y;
+  sudo systemctl start ntpd && sudo systemctl enable ntpd;
+  cat /dev/null > /etc/ntp.conf;
+  sudo echo "server 192.168.168.101" >> /etc/ntp.conf;
+  sudo echo "0/5 0 * * *  /usr/sbin/ntpdate 192.168.168.101"  >> /etc/crontab;
+  sudo sleep 20 ; reboot
+    SHELL
+  end  
+end
