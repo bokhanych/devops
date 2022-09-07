@@ -6,7 +6,6 @@ EXTERNAL_IP=$(hostname  -I | cut -f1 -d' ');
 echo -n "ENTER HOSTNAME [Example: ovpnserver]: "; read HOSTNAME;
 echo -n "ENTER VPN LAN [Example: 10.10.10.0]: "; read VPN_LAN;
 echo -n "ENTER VPN PORT [Example: 54321]: "; read VPN_PORT;
-echo -n "ENTER COUNT VPN USERS [Example: 2]: "; read CUSERS;
 
 # HOSTNAME
 echo 127.0.0.1 localhost > /etc/hosts;
@@ -102,7 +101,7 @@ mkdir /etc/openvpn/tmp;
 mv /etc/openvpn/client/ /etc/openvpn/clients;
 cd /etc/openvpn/easy-rsa;
 
-for i in {1..$CUSERS};
+for i in {1..3};
 do 
 	sudo /etc/openvpn/easy-rsa/easyrsa gen-req client$i nopass; 
 	sudo /etc/openvpn/easy-rsa/easyrsa sign-req client client$i;
@@ -150,7 +149,7 @@ EOF
 sed -i "s%EXTERNAL_IP%$EXTERNAL_IP%g" /etc/openvpn/clients/client1.conf;
 sed -i "s%VPN_PORT%$VPN_PORT%g" /etc/openvpn/clients/client1.conf;
 
-for i in {1..$CUSERS}; 
+for i in {1..3}; 
 do mkdir client$i;
 	sed s/client1/client$i/ < client1.conf > client$i/client$i.ovpn;
 	echo "<ca>" >> client$i/client$i.ovpn;
