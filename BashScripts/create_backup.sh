@@ -1,14 +1,14 @@
 #!/bin/bash
-LOGFILE=/var/log/BACKUP_FOLDER.log
+LOGFILE=/var/log/backups.log
 BACKUP_FOLDER=/home/BACKUP_FOLDER
-BACKUP_COUNT=5
+BACKUP_COUNT="5"
 FOLDER=/files
 FILE_COUNT=$(ls -l $BACKUP_FOLDER | grep -v ^d | wc -l)
-
+# check backup folder is exist
 if [ ! -d "$BACKUP_FOLDER" ]; then
   mkdir -p $BACKUP_FOLDER;
 fi
-
+# create backup archive
 tar -czvf $BACKUP_FOLDER/backup.$(date +%Y%m%d).tar.gz $FOLDER
 
 
