@@ -1,4 +1,5 @@
 #!/bin/bash
+# backup with rotation and log
 
 # date
 BACKUP_DATE=`date +%Y-%m-%d_%H:%M:%S`
