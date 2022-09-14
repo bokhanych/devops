@@ -1,20 +1,39 @@
 #!/bin/bash
+
+# HOW SET LEVEL DEPTH AND CREATE DIRECTORY IN DIRECTORY DEPTH-1???
+
 GENERATION_FOLDER="/tmp"
-GENERATION_DEPTH="2"
+GENERATION_DEPTH="3"
+RND=$[$RANDOM % 9 +1 ]
+
 rm -r dir*
 
-x="1"
-while [ $x -lt $GENERATION_DEPTH ]
+for ((i=1; i <= $RND; i++))
 do
-((x++))
-DEPTH=3
-#       for ((i=1; i < $[$RANDOM % 9 +1 ]; i++))
-        for ((i=1; i < $DEPTH; i++))
+
+# create directory depth 1
+mkdir dir$i
+
+        # create directory depth 2
+        if [ $i -lt $RND ]
+        then
+        mkdir dir$i/dir$i$i
+        continue
+        fi
+
+
+        # random count of files in directory
+        for ((f=1; f < $[$RANDOM % 9 +1 ]; f++))
         do
-        mkdir dir$i
-                for ((f=1; f < $[$RANDOM % 9 +1 ]; f++))
-                do
-                        touch dir$i/file$i$[$RANDOM % 9 +1 ]
-                done
+                touch dir$i/file$i$[$RANDOM % 9 +1 ]
         done
 done
+
+
+
+# -eq равно (equal)
+# -ne не равно (not equal)
+# -lt меньше (less)
+# -le меньше или равно (less than or equal)
+# -gt больше (greater)
+# -ge больше или равно (greater)
