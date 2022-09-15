@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# HOW SET LEVEL DEPTH AND CREATE DIRECTORY IN DIRECTORY DEPTH-1???
+# HOW SET LEVEL DEPTH AND CREATE DIRECTORY IN DIRECTORY DEPTH-2???
 
 GENERATION_FOLDER="/tmp"
 GENERATION_DEPTH="3"
@@ -22,7 +22,7 @@ mkdir dir$i
         fi
 
 
-        # random count of files in directory
+        # random (NOT WORK) count of files in directory
         for ((f=1; f < $[$RANDOM % 9 +1 ]; f++))
         do
                 touch dir$i/file$i$[$RANDOM % 9 +1 ]
