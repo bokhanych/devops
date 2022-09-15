@@ -12,3 +12,4 @@ else
 echo "Established connection on $PORT port: "
 netstat -ant | grep ":${PORT}" | grep "ESTABLISHED" | tee >(wc -l)
 fi
+echo -n "Total capacity of disk devices: "; df -h --total | grep total | awk '{print $2}'
