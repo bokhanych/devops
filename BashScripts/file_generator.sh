@@ -1,39 +1,26 @@
 #!/bin/bash
+GENERATION_FOLDER="$1"
+MAX_GENERATION_DEPTH="$2"
 
-# HOW SET LEVEL DEPTH AND CREATE DIRECTORY IN DIRECTORY DEPTH-2???
-
-GENERATION_FOLDER="/tmp"
-GENERATION_DEPTH="3"
-RND=$[$RANDOM % 9 +1 ]
-
-rm -r dir*
-
-for ((i=1; i <= $RND; i++))
-do
+# clear generation folder:
+if [ -d "$GENERATION_FOLDER" ]; then
+    rm -rf "$GENERATION_FOLDER" 
+    mkdir "$GENERATION_FOLDER";
+else
+mkdir "$GENERATION_FOLDER";
+fi
 
 # create directory depth 1
-mkdir dir$i
+for ((i=1; i <= $[$RANDOM % 9 +1 ]; i++))
+do
+mkdir $GENERATION_FOLDER/dir$i
 
-        # create directory depth 2
-        if [ $i -lt $RND ]
-        then
-        mkdir dir$i/dir$i$i
-        continue
-        fi
-
-
-        # random (NOT WORK) count of files in directory
-        for ((f=1; f < $[$RANDOM % 9 +1 ]; f++))
-        do
-                touch dir$i/file$i$[$RANDOM % 9 +1 ]
-        done
+    # create directory depths
+    for ((CURRENT_GENERATION_DEPTH=1; CURRENT_GENERATION_DEPTH < $MAX_GENERATION_DEPTH; CURRENT_GENERATION_DEPTH++ ))
+    do
+    mkdir $_/dir$[$RANDOM % 9 +1 ]
+    done
 done
 
-
-
-# -eq равно (equal)
-# -ne не равно (not equal)
-# -lt меньше (less)
-# -le меньше или равно (less than or equal)
-# -gt больше (greater)
-# -ge больше или равно (greater)
+# create files
+find $GENERATION_FOLDER/. -type d -exec sh -c 'for d; do touch "$d/file"; done' _ {} +
