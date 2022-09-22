@@ -13,6 +13,7 @@ else
 mkdir "$GENERATION_FOLDER";
 fi
 
+# even or odd
 for ((i=1; i <= FILE_COUNT; i++))
 do
 touch $GENERATION_FOLDER/file$i
