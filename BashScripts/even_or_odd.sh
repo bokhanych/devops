@@ -1,5 +1,4 @@
 #!/usr/bin/bash
-
 # Упрощенный вариант: сгенерировать в папке n файлов и внести в четный > even, нечетный > odd
 
 GENERATION_FOLDER="/tmp/even_odd"

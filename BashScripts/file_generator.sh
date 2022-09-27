@@ -1,4 +1,5 @@
 #!/bin/bash
+
 GENERATION_FOLDER="$1"
 MAX_GENERATION_DEPTH="$2"
 

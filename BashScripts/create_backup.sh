@@ -30,10 +30,12 @@ echo "backup_$BACKUP_DATE.tar.bz2 DONE" >> $LOG_FILE
 COPIES_COUNTER=`ls $DIRECTORY_FOR_BACKUPS | grep backup_ | wc -l`
 if [ $COPIES_COUNTER -gt $MAX_COPIES_COUNTER ]
 then
+
 # how many files to delete
 NEED_TO_DELETE_COUNTER=$(($(ls $DIRECTORY_FOR_BACKUPS | wc -l)-$MAX_COPIES_COUNTER))
 for (( i==1; i<$NEED_TO_DELETE_COUNTER; i++ ))
 do
+
 # sort and delete the older file
 echo "$(ls $DIRECTORY_FOR_BACKUPS | sort | head -n 1) REMOVED" >> $LOG_FILE
 rm $DIRECTORY_FOR_BACKUPS/$(ls $DIRECTORY_FOR_BACKUPS | sort | head -n 1)
