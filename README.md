@@ -8,6 +8,6 @@ TeachMeSkills homeworks:
 
 урок 11 BASH 3: arrays.sh, even_or_odd.sh
 
-урок 12 BASH 4: cookies.sh
+урок 12 BASH 4: currency.sh, cookies.sh
 
 наработки: test_file.sh
