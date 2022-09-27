@@ -1,4 +1,6 @@
 #!/bin/bash
+
+#download page
 wget -O web-page https://www.atlassian.com/continuous-delivery/continuous-integration
 
 #count of phrases
