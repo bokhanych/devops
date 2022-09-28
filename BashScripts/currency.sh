@@ -1,6 +1,6 @@
 #!/bin/bash
 PAGE=$(curl -s https://myfin.by/bank/kursy_valjut_nbrb)
-PS3='Please choose currency: '
+echo 'Please choose currency: '
 select currency in "USD" "EUR" "RUB" "PLN" "UAH"; do
   case $currency in
     USD)
