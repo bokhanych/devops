@@ -1,0 +1,68 @@
+# сделать второго пользователя "ansible" и ключ под него
+# сделать playbook
+
+Vagrant.configure("2") do |config|
+
+	config.vm.define "ansible" do |ansible|
+		ansible.vm.box = "ubuntu/jammy64"
+		ansible.vm.hostname="ansible"
+		ansible.vm.network "public_network", ip: "192.168.100.10"
+		ansible.vm.provision "shell", inline: <<-SHELL
+			# ssh keys
+			ssh-keygen -b 2048 -t rsa -f /home/vagrant/.ssh/id_rsa -q -N ""
+			cp /home/vagrant/.ssh/id_rsa.pub /vagrant/.vagrant/machines/ansible/virtualbox/id_rsa.pub
+			# ansible install
+			sudo apt update -y
+			sudo apt install ansible -y
+			sudo mkdir /etc/ansible
+            # ansible inventory
+            echo "[apt-install]" > /etc/ansible/hosts
+            echo "debian ansible_host=192.168.100.11" > /etc/ansible/hosts
+			echo ""> /etc/ansible/hosts
+            echo "[yum-install]" > /etc/ansible/hosts
+            echo "web_centos ansible_host=192.168.100.12" > /etc/ansible/hosts
+            echo "" > /etc/ansible/hosts
+            echo "[all:vars]" > /etc/ansible/hosts
+            echo "ansible_user=vagrant" > /etc/ansible/hosts
+            # ansible config
+            echo "[defaults]" > /etc/ansible/ansible.cfg
+            echo "host_key_checking = false" > /etc/ansible/ansible.cfg
+			echo "inventory=/etc/ansible/hosts" > /etc/ansible/ansible.cfg
+			# ansible playbook
+			# cat << EOF > /etc/ansible/playbook.yaml
+			SHELL
+		ansible.vm.provider "virtualbox" do |vb|
+			vb.customize ["modifyvm", :id, "--name", "ansible"]
+			vb.customize ["modifyvm", :id, "--memory", "1024"]
+		end
+	end
+
+	config.vm.define "debian" do |debian|
+		debian.vm.box = "debian/bullseye64"
+		debian.vm.hostname="debian"
+        debian.vm.network "public_network", ip: "192.168.100.11"
+		debian.vm.provision "shell", inline: <<-SHELL
+		# copy ssh master key to authorized_keys:
+		sudo cat /vagrant/.vagrant/machines/ansible/virtualbox/id_rsa.pub > /home/vagrant/.ssh/authorized_keys
+		SHELL
+		debian.vm.provider "virtualbox" do |vb|
+			vb.customize ["modifyvm", :id, "--name", "debian"]
+			vb.customize ["modifyvm", :id, "--memory", "1024"]
+		end
+	end
+	
+	config.vm.define "centos" do |centos|
+		centos.vm.box = "centos/8"
+		centos.vm.hostname="centos"
+        centos.vm.network "public_network", ip: "192.168.100.12"
+		centos.vm.provision "shell", inline: <<-SHELL
+		# copy ssh master key to authorized_keys:
+		sudo cat /vagrant/.vagrant/machines/ansible/virtualbox/id_rsa.pub > /home/vagrant/.ssh/authorized_keys
+		SHELL
+		centos.vm.provider "virtualbox" do |vb|
+			vb.customize ["modifyvm", :id, "--name", "centos"]
+			vb.customize ["modifyvm", :id, "--memory", "1024"]
+		end
+	end
+  
+end
