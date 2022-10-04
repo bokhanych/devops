@@ -14,11 +14,11 @@ Vagrant.configure("2") do |config|
 			sudo mkdir /etc/ansible
 			SHELL
 		# ansible config
-		ansible.vm.provision "file", source: "/vagrant/ansible.cfg", destination: "/etc/ansible/"
+		ansible.vm.provision "file", source: "/VM/ansible.cfg", destination: "/etc/ansible/"
 		# ansible inventory
-		ansible.vm.provision "file", source: "/vagrant/hosts", destination: "/etc/ansible/"
+		ansible.vm.provision "file", source: "/VM/hosts", destination: "/etc/ansible/"
 		# ansible playbook
-		ansible.vm.provision "file", source: "/vagrant/apache-playbook.yaml", destination: "/etc/ansible/"
+		ansible.vm.provision "file", source: "/VM/apache-playbook.yaml", destination: "/etc/ansible/"
 		ansible.vm.provider "virtualbox" do |vb|
 			vb.customize ["modifyvm", :id, "--name", "ansible"]
 			vb.customize ["modifyvm", :id, "--memory", "1024"]
