@@ -1,23 +1,23 @@
 ---
-- name: Install Apache and Upload my Web Page
-  hosts: all
-  become: yes
-  
-  vars:
-     source_file: /tmp/index.html
-	 destin_file: /var/wwww/html
-	 
-  tasks:
-  - name: Install Apache Web Server
-    yum: name=httpd state=latest
-
-  - name: Copy new page to Server
-    copy: src={{ source_file }} dest={{ destin_file }} mode=0555
-	notify: restart apache
-	
-  - name: Start WebServer and make it enable on boot
-    service: name=httpd state=started enabled=yes
-	
+-
+  become: true
   handlers:
-  - name: restart apache
-    service: name=httpd state=restarted
+    -
+      name: "restart apache"
+      service: "name=apache2 state=restarted"
+  hosts: all
+  name: "Install Apache and Upload my Web Page"
+  tasks:
+    -
+      name: "Install Apache Web Server"
+      apt: "name=apache2 state=latest"
+    -
+      copy: "src={{ source_file }} dest={{ destin_file }} mode=0555"
+      name: "Copy new page to Server"
+      notify: "restart apache"
+    -
+      name: "Start WebServer and make it enable on boot"
+      service: "name=apache2 state=started enabled=yes"
+  vars:
+    destin_file: /var/wwww/html
+    source_file: /tmp/index.html

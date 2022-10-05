@@ -1,0 +1,8 @@
+[apt]
+debian ansible_host=192.168.100.11
+
+[yum]
+centos ansible_host=192.168.100.12
+            
+[all:vars]
+ansible_user=root

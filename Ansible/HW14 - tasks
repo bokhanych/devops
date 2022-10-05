@@ -1,0 +1,7 @@
+1. доделать yum \ apt
+
+2. добавить репозиторий в centos
+
+3. добавить в код запуск ансибла
+cd /etc/ansible
+su yura -c "ansible-playbook apache-playbook.yaml"

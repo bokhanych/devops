@@ -1,0 +1,62 @@
+Vagrant.configure("2") do |config|
+ config.vm.box_check_update = false
+	config.vm.define "debian" do |debian|
+		debian.vm.box = "debian/bullseye64"
+		debian.vm.hostname="debian"
+        debian.vm.network "public_network", ip: "192.168.100.11", bridge: "Realtek Gaming GbE Family Controller"
+		debian.vm.provision "shell", inline: <<-SHELL
+			# ssh key generate
+			sudo mkdir -p /root/.ssh/
+			sudo ssh-keygen -b 2048 -t rsa -f /root/id_rsa -q -N ""
+			sudo cp /root/id_rsa /vagrant/
+			sudo touch /root/.ssh/authorized_keys
+			sudo cat /vagrant/id_rsa.pub >> /root/.ssh/authorized_keys
+		SHELL
+		debian.vm.provider "virtualbox" do |vb|
+			vb.customize ["modifyvm", :id, "--name", "debian"]
+			vb.customize ["modifyvm", :id, "--memory", "1024"]
+		end
+	end
+
+	config.vm.define "centos" do |centos|
+		centos.vm.box = "centos/8"
+		centos.vm.hostname="centos"
+        centos.vm.network "public_network", ip: "192.168.100.12", bridge: "Realtek Gaming GbE Family Controller"
+		centos.vm.provision "shell", inline: <<-SHELL
+			# ssh key copy
+			sudo mkdir -p /root/.ssh/
+			sudo touch /root/.ssh/authorized_keys
+			sudo cat /vagrant/id_rsa.pub >> /root/.ssh/authorized_keys
+		SHELL
+		centos.vm.provider "virtualbox" do |vb|
+			vb.customize ["modifyvm", :id, "--name", "centos"]
+			vb.customize ["modifyvm", :id, "--memory", "1024"]
+		end
+	end
+
+	config.vm.define "ansible" do |ansible|
+		ansible.vm.box = "ubuntu/jammy64"
+		ansible.vm.hostname="ansible"
+		ansible.vm.network "public_network", ip: "192.168.100.10", bridge: "Realtek Gaming GbE Family Controller"
+		ansible.vm.provision "shell", inline: <<-SHELL
+			# ssh key copy
+			sudo mkdir -p /root/.ssh/
+			sudo cp /vagrant/id_rsa /root/.ssh/
+			# ansible install
+			sudo apt update -y
+			sudo apt install ansible -y
+			sudo mkdir /etc/ansible
+			# ansible config
+			sudo cp /vagrant/ansible.cfg /etc/ansible/
+			# ansible inventory
+			sudo cp /vagrant/hosts /etc/ansible/
+			# ansible playbook
+			sudo cp /vagrant/apache-playbook.yaml /etc/ansible/
+		SHELL
+		ansible.vm.provider "virtualbox" do |vb|
+			vb.customize ["modifyvm", :id, "--name", "ansible"]
+			vb.customize ["modifyvm", :id, "--memory", "1024"]
+		end
+	end	
+
+end
