@@ -1,0 +1,73 @@
+Vagrant.configure("2") do |config|
+
+	config.vm.define "ansible" do |ansible|
+		ansible.vm.box = "ubuntu/jammy64"
+		ansible.vm.box_check_update = false
+		ansible.vm.hostname="ansible"
+		ansible.vm.network "private_network", ip: "10.0.0.10"
+		ansible.vm.provision "shell", inline: <<-SHELL
+			# keygen
+			sudo ssh-keygen -b 2048 -t rsa -f /vagrant/id_rsa -q -N ""
+			# user
+			USER="ansible"
+			sudo useradd -m "$USER"
+			sudo mkdir -p /home/"$USER"/.ssh
+			sudo cp /vagrant/id_rsa /home/"$USER"/.ssh/
+			sudo cat /vagrant/id_rsa.pub >> /home/"$USER"/.ssh/authorized_keys
+			sudo chown "$USER":"$USER" /home/"$USER" -R
+			sudo chmod 600 /home/"$USER"/.ssh/authorized_keys
+			sudo chmod 700 /home/"$USER"/.ssh
+			sudo echo "$USER ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
+			# ansible install
+			sudo apt update -y
+			sudo apt install ansible -y
+		SHELL
+		ansible.vm.provider "virtualbox" do |vb|
+			vb.customize ["modifyvm", :id, "--name", "ansible"]
+			vb.customize ["modifyvm", :id, "--memory", "1024"]
+		end
+	end	
+
+	config.vm.define "debian" do |debian|
+		debian.vm.box = "debian/bullseye64"
+		debian.vm.box_check_update = false
+		debian.vm.hostname="debian"
+        debian.vm.network "private_network", ip: "10.0.0.11"
+		debian.vm.provision "shell", inline: <<-SHELL
+			USER="ansible"
+			sudo useradd -m "$USER"
+			sudo mkdir -p /home/"$USER"/.ssh
+			sudo cat /vagrant/id_rsa.pub >> /home/"$USER"/.ssh/authorized_keys
+			sudo chown "$USER":"$USER" /home/"$USER" -R
+			sudo chmod 600 /home/"$USER"/.ssh/authorized_keys
+			sudo chmod 700 /home/"$USER"/.ssh
+			sudo echo "$USER ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
+		SHELL
+		debian.vm.provider "virtualbox" do |vb|
+			vb.customize ["modifyvm", :id, "--name", "debian"]
+			vb.customize ["modifyvm", :id, "--memory", "1024"]
+		end
+	end
+
+	config.vm.define "centos" do |centos|
+		centos.vm.box = "centos/8"
+		centos.vm.box_check_update = false
+		centos.vm.hostname="centos"
+        centos.vm.network "private_network", ip: "10.0.0.12"
+		centos.vm.provision "shell", inline: <<-SHELL
+			USER="ansible"
+			sudo useradd -m "$USER"
+			sudo mkdir -p /home/"$USER"/.ssh
+			sudo cat /vagrant/id_rsa.pub >> /home/"$USER"/.ssh/authorized_keys
+			sudo chown "$USER":"$USER" /home/"$USER" -R
+			sudo chmod 600 /home/"$USER"/.ssh/authorized_keys
+			sudo chmod 700 /home/"$USER"/.ssh
+			sudo echo "$USER ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
+		SHELL
+		centos.vm.provider "virtualbox" do |vb|
+			vb.customize ["modifyvm", :id, "--name", "centos"]
+			vb.customize ["modifyvm", :id, "--memory", "1024"]
+		end
+	end
+	
+end

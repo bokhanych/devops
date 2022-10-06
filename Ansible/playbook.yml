@@ -1,0 +1,42 @@
+---
+- name: "Install Apache and Upload my Web Page"
+  hosts: all
+  become: yes
+
+  vars:
+    destin_file: /var/wwww/html
+    source_file: /tmp/index.html
+
+  tasks:
+  - name: "Install Apache2"
+    apt: name=apache2 update_cache=yes state=latest
+    when: ansible_os_family == "Debian"
+
+  - name: "Install Httpd"
+    yum: name=httpd state=latest
+    when: ansible_os_family == "RedHat"
+
+  - name: "Copy new page to Debian Server"
+    copy: src={{ source_file }} dest={{ destin_file }} mode=0555
+    notify: Restart apache2
+    when: ansible_os_family == "Debian"
+
+  - name: "Copy new page to Centos Server"
+    copy: src={{ source_file }} dest={{ destin_file }} mode=0555
+    notify: Restart httpd
+    when: ansible_os_family == "RedHat"
+
+  - name: "Start apache2 and make it enable on boot"
+    service: name=apache2 state=started enabled=yes
+    when: ansible_os_family == "Debian"
+
+  - name: "Start httpd and make it enable on boot"
+    service: name=httpd state=started enabled=yes
+    when: ansible_os_family == "RedHat"
+
+  handlers:
+  - name: Restart apache2
+    service: name=apache2 state=restarted
+
+  - name: Restart httpd
+    service: name=httpd state=restarted
