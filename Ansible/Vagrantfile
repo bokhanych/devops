@@ -21,6 +21,13 @@ Vagrant.configure("2") do |config|
 			# ansible install
 			sudo apt update -y
 			sudo apt install ansible -y
+			sudo mkdir /etc/ansible
+			# ansible config
+			sudo cp /vagrant/ansible.cfg /etc/ansible/
+			# ansible inventory
+			sudo cp /vagrant/hosts /etc/ansible/
+			# ansible playbook
+			sudo cp /vagrant/apache-playbook.yaml /etc/ansible/
 		SHELL
 		ansible.vm.provider "virtualbox" do |vb|
 			vb.customize ["modifyvm", :id, "--name", "ansible"]
