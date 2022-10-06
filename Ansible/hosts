@@ -1,8 +1,5 @@
 [apt]
-debian ansible_host=10.0.0.11
+debian ansible_host=10.0.0.11 ansible_user=debuser
 
 [yum]
-centos ansible_host=10.0.0.12
-            
-[all:vars]
-ansible_user=ansible
+centos ansible_host=10.0.0.12 ansible_user=centuser
