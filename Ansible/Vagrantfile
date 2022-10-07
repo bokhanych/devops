@@ -87,8 +87,6 @@ Vagrant.configure("2") do |config|
 			sudo cp /vagrant/hosts /etc/ansible/
 			sudo cp /vagrant/playbook.yml /etc/ansible/
 			sudo chown $USER:root -R /etc/ansible/
-			# html
-			sudo  <h1>TEST</h1>
 			# ansible run playbook 
 			su $USER -c "cd /etc/ansible/ && ansible-playbook playbook.yml"
 		SHELL
