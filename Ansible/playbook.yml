@@ -4,8 +4,8 @@
   become: yes
 
   vars:
-    destin_file: /var/wwww/html
-    source_file: /tmp/index.html
+    destin_file: /var/wwww/html/index.html
+    source_file: /vagrant/index.html
 
   tasks:
   - name: "Install Apache2"

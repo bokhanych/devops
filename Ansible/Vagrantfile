@@ -82,12 +82,15 @@ Vagrant.configure("2") do |config|
 			# ansible install
 			sudo apt update -y
 			sudo apt install ansible -y
-			sudo mkdir /home/ansible
-			sudo cp /vagrant/ansible.cfg /home/ansible/
-			sudo cp /vagrant/hosts /home/ansible/
-			sudo cp /vagrant/playbook.yml /home/ansible/
+			sudo mkdir /etc/ansible
+			sudo cp /vagrant/ansible.cfg /etc/ansible/
+			sudo cp /vagrant/hosts /etc/ansible/
+			sudo cp /vagrant/playbook.yml /etc/ansible/
+			sudo chown $USER:root -R /etc/ansible/
+			# html
+			sudo  <h1>TEST</h1>
 			# ansible run playbook 
-			su $USER -c "cd /home/ansible && ansible-playbook playbook.yml"
+			su $USER -c "cd /etc/ansible/ && ansible-playbook playbook.yml"
 		SHELL
 		ansible.vm.provider "virtualbox" do |vb|
 			vb.customize ["modifyvm", :id, "--name", "ansible"]
