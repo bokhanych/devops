@@ -14,7 +14,7 @@ sudo cat << EOF > /root/html/index.html
 <html>
 <head><meta http-equiv="Content-Type" content="text/html; charset=windows-1251"><meta name="color-scheme" content="light dark"></head>
 <body> 
-<h1>ПРЕВЕД МЕДВЕД</h1>
+<h1>PREVED, MEDVED!:)</h1>
 </body>
 </html>
 EOF
@@ -27,3 +27,12 @@ EOF
 	end
 
 end
+
+# RESULT:
+#root@docker:~# curl localhost:8082
+#<html>
+#<head><meta http-equiv="Content-Type" content="text/html; charset=windows-1251"><meta name="color-scheme" content="light dark"></head>
+#<body>
+#<h1>PREVED, MEDVED!</h1>
+#</body>
+#</html>
