@@ -10,4 +10,6 @@ TeachMeSkills homeworks:
 
 урок 12 BASH 4: currency.sh, cookies.sh
 
-наработки: test_file.sh
+урок 14-15: Ansible
+
+урок 16-17: Docker
