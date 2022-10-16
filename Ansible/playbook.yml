@@ -1,38 +1,36 @@
 ---
 - name: "Install Apache and Upload my Web Page"
-  hosts: all
+  hosts: test
   become: yes
 
   vars:
-    destin_file: /var/wwww/html/index.html
     source_file: /vagrant/index.html
+    destin_file: /var/wwww/html/
 
   tasks:
-  - name: "Install Apache2"
-    apt: name=apache2 update_cache=yes state=latest
-    when: ansible_os_family == "Debian"
+  - block: #for CentOS
+    - name: "Install Httpd"
+      yum: name=httpd state=latest
 
-  - name: "Install Httpd"
-    yum: name=httpd state=latest
+    - name: "Copy new page to Centos Server"
+      copy: src={{ source_file }} dest={{ destin_file }} mode=0555
+      notify: Restart httpd
+
+    - name: "Start httpd and make it enable on boot"
+      service: name=httpd state=started enabled=yes
     when: ansible_os_family == "RedHat"
 
-  - name: "Copy new page to Debian Server"
-    copy: src={{ source_file }} dest={{ destin_file }} mode=0555
-    notify: Restart apache2
+  - block: #for Debian
+    - name: "Install Apache2"
+      apt: name=apache2 update_cache=yes state=latest
+
+    - name: "Copy new page to Debian Server"
+      copy: src={{ source_file }} dest={{ destin_file }} mode=0555
+      notify: Restart apache2
+
+    - name: "Start apache2 and make it enable on boot"
+      service: name=apache2 state=started enabled=yes
     when: ansible_os_family == "Debian"
-
-  - name: "Copy new page to Centos Server"
-    copy: src={{ source_file }} dest={{ destin_file }} mode=0555
-    notify: Restart httpd
-    when: ansible_os_family == "RedHat"
-
-  - name: "Start apache2 and make it enable on boot"
-    service: name=apache2 state=started enabled=yes
-    when: ansible_os_family == "Debian"
-
-  - name: "Start httpd and make it enable on boot"
-    service: name=httpd state=started enabled=yes
-    when: ansible_os_family == "RedHat"
 
   handlers:
   - name: Restart apache2
