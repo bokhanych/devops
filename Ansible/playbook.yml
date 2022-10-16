@@ -1,0 +1,40 @@
+---
+- name: "Install Apache and Upload my Web Page"
+  hosts: test
+  become: yes
+
+  vars:
+    source_file: /vagrant/index.html
+    destin_file: /var/wwww/html/
+
+  tasks:
+  - block: #for CentOS
+    - name: "Install Httpd"
+      yum: name=httpd state=latest
+
+    - name: "Copy new page to Centos Server"
+      copy: src={{ source_file }} dest={{ destin_file }} mode=0555
+      notify: Restart httpd
+
+    - name: "Start httpd and make it enable on boot"
+      service: name=httpd state=started enabled=yes
+    when: ansible_os_family == "RedHat"
+
+  - block: #for Debian
+    - name: "Install Apache2"
+      apt: name=apache2 update_cache=yes state=latest
+
+    - name: "Copy new page to Debian Server"
+      copy: src={{ source_file }} dest={{ destin_file }} mode=0555
+      notify: Restart apache2
+
+    - name: "Start apache2 and make it enable on boot"
+      service: name=apache2 state=started enabled=yes
+    when: ansible_os_family == "Debian"
+
+  handlers:
+  - name: Restart apache2
+    service: name=apache2 state=restarted
+
+  - name: Restart httpd
+    service: name=httpd state=restarted
