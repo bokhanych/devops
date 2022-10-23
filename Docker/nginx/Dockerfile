@@ -13,7 +13,7 @@ RUN yum -y install epel-release && yum -y update && yum -y install \
 RUN rm -r /usr/share/nginx/html/* -f
 
 # Copy custom index.html
-COPY ./html/* /usr/share/nginx/html/
+COPY ./html/index.html /usr/share/nginx/html/
 
 # Expose Port for the Application
 EXPOSE 80
