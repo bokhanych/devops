@@ -1,0 +1,19 @@
+#Download base image ubuntu 20.04
+FROM centos:7
+
+# LABEL about the custom image
+LABEL description="Centos + Nginx"
+
+# Update and install nginx
+RUN yum -y install epel-release
+RUN yum -y update
+RUN yum -y install nginx
+
+# Copy custom index.html
+COPY ./index.html /usr/share/nginx/html/
+
+# Expose Port for the Application
+EXPOSE 80 443
+
+# RUN VASYA, RUN
+CMD ["nginx", "-g", "daemon off;"]                          
