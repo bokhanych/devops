@@ -5,13 +5,13 @@ services:
   nginx:
     build: ./nginx/
     ports:
-      - 8080:80
+      - 443:443
     volumes:
       - ./nginx/logs:/opt/nginx/logs
 
   apache:
     build: ./apache/
     ports:
-      - 9090:80
+      - 80:80
     volumes:
       - ./apache/logs:/opt/apache/logs      
