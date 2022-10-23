@@ -10,13 +10,23 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Update and install nginx
 RUN apt update && apt install -y \
         apache2 \
-        net-tools
+        net-tools \
+        nano
+
+# Create log folder
+RUN mkdir -p /opt/apache/logs
 
 # Clear html directory
 RUN rm -r /var/www/html/* -f
 
 # Copy custom index.html
-COPY ./html/* /var/www/html/
+COPY ./html/index.html /var/www/html/
+
+# Change apache config
+RUN rm -f /etc/apache2/sites-available/000-default.conf
+
+# Copy custom config
+COPY ./conf/000-default.conf /etc/apache2/sites-available/
 
 # Expose Port for the Application
 EXPOSE 80

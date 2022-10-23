@@ -3,11 +3,15 @@ version: "3"
 services:
 
   nginx:
-    build: nginx/
+    build: ./nginx/
     ports:
       - 8080:80
+    volumes:
+      - ./nginx/logs:/opt/nginx/logs
 
   apache:
-    build: apache/
+    build: ./apache/
     ports:
       - 9090:80
+    volumes:
+      - ./apache/logs:/opt/apache/logs      
