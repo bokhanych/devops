@@ -8,10 +8,15 @@ LABEL description="Ubuntu + Apache2"
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Update and install nginx
-RUN apt update && apt install -y apache2 && apt clean
+RUN apt update && apt install -y \
+        apache2 \
+        net-tools
 
-# Create custom index.html
-RUN echo '<h1>Ubuntu + Apache2</h1>' > /var/www/html/index.html
+# Clear html directory
+RUN rm -r /var/www/html/* -f
+
+# Copy custom index.html
+COPY ./html/* /var/www/html/
 
 # Expose Port for the Application
 EXPOSE 80
