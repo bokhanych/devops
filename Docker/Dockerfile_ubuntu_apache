@@ -8,14 +8,13 @@ LABEL description="Ubuntu + Apache2"
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Update and install nginx
-RUN apt update
-RUN apt install -y apache2 && apt clean
+RUN apt update && apt install -y apache2 && apt clean
 
-# Copy custom index.html
-COPY ./index.html /var/www/html/
+# Create custom index.html
+RUN echo '<h1>Ubuntu + Apache2</h1>' > /var/www/html/index.html
 
 # Expose Port for the Application
-EXPOSE 80 443
+EXPOSE 80
 
 # RUN VASYA, RUN
 CMD ["/usr/sbin/apache2ctl", "-D","FOREGROUND"]

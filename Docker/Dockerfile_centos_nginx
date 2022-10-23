@@ -5,15 +5,13 @@ FROM centos:7
 LABEL description="Centos + Nginx"
 
 # Update and install nginx
-RUN yum -y install epel-release
-RUN yum -y update
-RUN yum -y install nginx
+RUN yum -y install epel-release && yum -y update && yum -y install nginx
 
-# Copy custom index.html
-COPY ./index.html /usr/share/nginx/html/
+# Create custom index.html
+RUN echo '<h1>Centos + Nginx</h1>' > /usr/share/nginx/html/index.html
 
 # Expose Port for the Application
-EXPOSE 80 443
+EXPOSE 80
 
 # RUN VASYA, RUN
 CMD ["nginx", "-g", "daemon off;"]                          
