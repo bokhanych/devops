@@ -1,3 +1,4 @@
-.git
-.vagrant
-id_rsa*
+**/.git
+**/.vagrant
+**/id_rsa*
+**/.log
