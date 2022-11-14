@@ -1,0 +1,4 @@
+2022/10/23 19:20:45 [error] 36#36: *7 directory index of "/usr/share/nginx/html/" is forbidden, client: 172.18.0.1, server: www.test-nginx.com, request: "GET / HTTP/1.1", host: "www.test-nginx.com"
+2022/10/23 19:20:45 [error] 36#36: *7 directory index of "/usr/share/nginx/html/" is forbidden, client: 172.18.0.1, server: www.test-nginx.com, request: "GET / HTTP/1.1", host: "www.test-nginx.com"
+2022/10/23 19:20:46 [error] 36#36: *7 directory index of "/usr/share/nginx/html/" is forbidden, client: 172.18.0.1, server: www.test-nginx.com, request: "GET / HTTP/1.1", host: "www.test-nginx.com"
+2022/10/23 19:20:46 [error] 36#36: *7 directory index of "/usr/share/nginx/html/" is forbidden, client: 172.18.0.1, server: www.test-nginx.com, request: "GET / HTTP/1.1", host: "www.test-nginx.com"

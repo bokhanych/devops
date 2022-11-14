@@ -25,11 +25,11 @@ COPY ./html/index.html /var/www/html/
 # Change apache config
 RUN rm -f /etc/apache2/sites-available/000-default.conf
 
-# Copy custom config
+# Copy apache config
 COPY ./conf/000-default.conf /etc/apache2/sites-available/
 
 # Expose Port for the Application
-EXPOSE 80
+# EXPOSE 80
 
 # RUN VASYA, RUN
 CMD ["/usr/sbin/apache2ctl", "-D","FOREGROUND"]
