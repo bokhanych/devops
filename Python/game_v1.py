@@ -1,4 +1,5 @@
 # Урок 27: Python 2
+# Вариант 1
 import random
 x = int(random.randint(1,10))
 def x_random():
