@@ -4,27 +4,31 @@ import random
 
 def game(random_number):
     user_number = int(input("Enter number: "))
-    if user_number == random_number :
-        print ("WIN! You guessed number", random_number)
-        answer(random_number)
-    elif user_number < random_number:
+    if user_number == int(random_number) :
+        print ("WIN! You guessed number")
+        return True
+    elif user_number < int(random_number):
         print ("LOSE! You number is less!")
-        answer(random_number)
     else:
         print ("LOSE! You number is higher!")
-        answer(random_number)
     return random_number
 
-def answer(y):
-    yn = str(input("Play again? [y/n]"))
-    if yn == "y":
-        menu()
-    else:
-        print("Win number was", y)
-    return y
-
 def menu():
-    x = int(random.randint(1,10))
-    game(x)
+    exit_button = "y"
+    while exit_button == "y":
+        x = random.randint(1,3)
+        new_game = False
+        while new_game == False:
+            y = game(x)
+            if y == True:
+                new_game= True
+                break
+            yesno = input("Try again? [y/n]: ")
+            if yesno == "y":
+                continue
+            else:
+                print (f"Win number was {y}.")
+                new_game=True
+        exit_button = input("Play again? [y/n]")
 
 menu()
