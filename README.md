@@ -13,3 +13,5 @@ TeachMeSkills homeworks:
 урок 14-15: Ansible
 
 урок 16-17: Docker
+
+урок 26-29: Python
