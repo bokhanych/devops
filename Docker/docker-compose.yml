@@ -12,10 +12,8 @@ services:
 
   apache:
     build: ./apache/
-    ports: ["80:8180","443:81143"]
-     # - 8180:80
-     # - 81143:443
-     #- 80:8180
-     #- 443:81143
+    ports:
+        - "8180:80"
+        - "81143:143"
     volumes:
       - ./apache/logs:/opt/apache/logs      
