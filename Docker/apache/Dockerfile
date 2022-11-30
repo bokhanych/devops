@@ -16,20 +16,17 @@ RUN apt update && apt install -y \
 # Create log folder
 RUN mkdir -p /opt/apache/logs
 
-# Clear html directory
+# Clear html directory & Copy custom index.html
 RUN rm -r /var/www/html/* -f
-
-# Copy custom index.html
 COPY ./html/index.html /var/www/html/
 
 # Change apache config
 RUN rm -f /etc/apache2/sites-available/000-default.conf
-
-# Copy apache config
 COPY ./conf/000-default.conf /etc/apache2/sites-available/
 
-# Expose Port for the Application
-# EXPOSE 80
+# Copy apache certs
+RUN mkdir -p /opt/apache/ssl
+COPY ./ssl/* /etc/apache2/ssl/
 
 # RUN VASYA, RUN
 CMD ["/usr/sbin/apache2ctl", "-D","FOREGROUND"]
