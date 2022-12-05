@@ -1,4 +1,6 @@
 **/.git
 **/.vagrant
 **/id_rsa*
+**/*.key
+**/*.pem
 **/.vscode

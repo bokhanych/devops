@@ -24,7 +24,8 @@ COPY ./html/index.html /var/www/html/
 RUN rm -f /etc/apache2/sites-available/000-default.conf
 COPY ./conf/000-default.conf /etc/apache2/sites-available/
 
-# Copy apache certs
+# SSL
+RUN a2enmod ssl
 RUN mkdir -p /opt/apache/ssl
 COPY ./ssl/* /etc/apache2/ssl/
 
