@@ -1,0 +1,4 @@
+[Mon Dec 05 18:02:48.285932 2022] [ssl:warn] [pid 15:tid 140399975414848] AH01906: www.test-apache.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Dec 05 18:02:48.296275 2022] [ssl:warn] [pid 15:tid 140399975414848] AH01906: www.test-apache.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Dec 05 18:10:16.085175 2022] [ssl:warn] [pid 15:tid 140476362685504] AH01906: www.test-apache.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
+[Mon Dec 05 18:10:16.092535 2022] [ssl:warn] [pid 15:tid 140476362685504] AH01906: www.test-apache.com:443:0 server certificate is a CA certificate (BasicConstraints: CA == TRUE !?)
