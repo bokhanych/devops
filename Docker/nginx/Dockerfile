@@ -25,8 +25,5 @@ COPY ./ssl/* /etc/ssl/certs/
 # Copy nginx config
 COPY ./conf/* /etc/nginx/conf.d/
 
-# Expose Port for the Application
-#EXPOSE 443
-
 # RUN VASYA, RUN
 CMD ["nginx", "-g", "daemon off;"]

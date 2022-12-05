@@ -2,16 +2,18 @@ version: "3"
 
 services:
 
-  nginx:
-    build: ./nginx/
-    ports:
-      - 443:443
-    volumes:
-      - ./nginx/logs:/opt/nginx/logs
+  #nginx:
+    #build: ./nginx/
+   # ports:
+   #   - 8080:80
+   #   - 80143:443
+   # volumes:
+    #  - ./nginx/logs:/opt/nginx/logs
 
   apache:
     build: ./apache/
     ports:
-      - 80:80
+        - "8180:80"
+        - "81143:143"
     volumes:
       - ./apache/logs:/opt/apache/logs      
