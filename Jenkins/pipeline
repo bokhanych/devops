@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+    
+    environment {
+        JENKINS_CONTAINER_NAME = "ubuntu_apache"
+        JENKINS_IMAGE_NAME = "ubuntu"
+        JENKINS_IMAGE_TAG = "20.04"
+        JENKINS_HTML = "Hello_World!"
+    }
+
+    stages {
+
+        stage('Clone Git') {
+            steps {
+                git branch: 'main', url: 'https://github.com/bokhanych/app-for-jenkins.git'
+            }
+        }
+
+        stage ('Docker build'){
+            steps {
+                sh "docker build ./apache/ -t ${JENKINS_CONTAINER_NAME} --build-arg JENKINS_IMAGE=${JENKINS_IMAGE_NAME}:${JENKINS_IMAGE_TAG} --build-arg JENKINS_HTML=${JENKINS_HTML}"
+            }
+        }
+
+        stage ('Docker run'){
+            steps {
+                sh "docker run -d -p 443:443 ${JENKINS_CONTAINER_NAME}"
+            }
+        }
+
+    }
+}
