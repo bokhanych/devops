@@ -1,0 +1,92 @@
+Started by user admin
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/Pipline
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Clone Git)
+[Pipeline] git
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/Pipline/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/bokhanych/app-for-jenkins.git # timeout=10
+Fetching upstream changes from https://github.com/bokhanych/app-for-jenkins.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.34.1'
+ > git fetch --tags --force --progress -- https://github.com/bokhanych/app-for-jenkins.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 40049e58099d8a74696dcd0ee61945e988e94b97 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 40049e58099d8a74696dcd0ee61945e988e94b97 # timeout=10
+ > git branch -a -v --no-abbrev # timeout=10
+ > git branch -D main # timeout=10
+ > git checkout -b main 40049e58099d8a74696dcd0ee61945e988e94b97 # timeout=10
+Commit message: "Update Dockerfile"
+ > git rev-list --no-walk 40049e58099d8a74696dcd0ee61945e988e94b97 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Docker build)
+[Pipeline] sh
++ docker build ./apache/ -t ubuntu_apache --build-arg JENKINS_IMAGE=ubuntu:20.04 --build-arg JENKINS_HTML=Hello_World!
+Sending build context to Docker daemon  14.85kB
+
+Step 1/14 : ARG JENKINS_IMAGE
+Step 2/14 : FROM ${JENKINS_IMAGE}
+ ---> 680e5dfb52c7
+Step 3/14 : ARG DEBIAN_FRONTEND=noninteractive
+ ---> Using cache
+ ---> 6d629a548802
+Step 4/14 : RUN apt update && apt install -y         apache2         net-tools         nano
+ ---> Using cache
+ ---> 8da5449af0fd
+Step 5/14 : RUN mkdir -p /opt/apache/logs
+ ---> Using cache
+ ---> 341745290732
+Step 6/14 : RUN rm -r /var/www/html/* -f
+ ---> Using cache
+ ---> 9faa8f01daef
+Step 7/14 : ARG JENKINS_HTML
+ ---> Using cache
+ ---> eac0e1fb3303
+Step 8/14 : RUN echo "${JENKINS_HTML}" > /var/www/html/index.html
+ ---> Using cache
+ ---> a01e7fd86110
+Step 9/14 : RUN rm -f /etc/apache2/sites-available/000-default.conf
+ ---> Using cache
+ ---> 26cba699dfc8
+Step 10/14 : COPY ./conf/000-default.conf /etc/apache2/sites-available/
+ ---> Using cache
+ ---> 010ccd44f6fa
+Step 11/14 : RUN a2enmod ssl
+ ---> Using cache
+ ---> ff33585ace5b
+Step 12/14 : RUN mkdir -p /opt/apache/ssl
+ ---> Using cache
+ ---> e4f5f5cfb0d9
+Step 13/14 : COPY ./ssl/* /etc/apache2/ssl/
+ ---> Using cache
+ ---> 0e8b1c40a6d2
+Step 14/14 : CMD ["/usr/sbin/apache2ctl", "-D","FOREGROUND"]
+ ---> Using cache
+ ---> f791744c893d
+Successfully built f791744c893d
+Successfully tagged ubuntu_apache:latest
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Docker run)
+[Pipeline] sh
++ docker run -d -p 443:443 ubuntu_apache
+d74039cc22761afc942495886c1d6036a9119f367b07ece1dfcde9f1eddd0cbe
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
