@@ -3,14 +3,14 @@ version: "3"
 services:
 
        mysql:
-               restart: always
-               build: ./mysql
-               container_name: mysql
-               ports:
-                       - "3306:3306"
+                restart: always
+                build: ./mysql
+                container_name: mysql
+                ports:
+                        - "3306:3306"
        postgresql:
-               restart: always
-               build: ./postgresql
-               container_name: postgresql
-               ports:
-                       - "5432:5432"
+                restart: always
+                build: ./postgresql
+                container_name: postgresql
+                ports:
+                        - "5432:5432"
