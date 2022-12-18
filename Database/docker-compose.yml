@@ -2,12 +2,12 @@ version: "3"
 
 services:
 
-       mysql:
-                restart: always
-                build: ./mysql
-                container_name: mysql
-                ports:
-                        - "3306:3306"
+       #mysql:
+       #         restart: always
+        #        build: ./mysql
+       #         container_name: mysql
+       #         ports:
+        #                - "3306:3306"
        postgresql:
                 restart: always
                 build: ./postgresql
