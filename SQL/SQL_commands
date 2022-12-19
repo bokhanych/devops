@@ -1,0 +1,47 @@
+#DROP DATABASE users_db;
+
+CREATE DATABASE users_db;
+
+USE users_db;
+
+CREATE TABLE table1 (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Username VARCHAR(50) UNIQUE NOT NULL,
+    Password VARCHAR(50) NOT NULL,
+    Email VARCHAR(50) UNIQUE NOT NULL 
+);
+
+CREATE TABLE table2 (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Email VARCHAR(50) UNIQUE NOT NULL,
+    Name VARCHAR(50) NOT NULL,
+    Surname VARCHAR(50) NOT NULL,
+    Age TINYINT NOT NULL
+);
+
+INSERT INTO
+    table1 (Username, Password, Email)
+VALUES
+    ('Rick_228', 'pass1', 'rick@adultswim.com'),
+    ('Morty_MF', 'pass2', 'morty@adultswim.com'),
+    ('Fenix_IA', 'pass3', 'fenix@adultswim.com'),
+    ('Beth_FU', 'pass4', 'beth@adultswim.com'),
+    ('Mister_P', 'pass5', 'poopybutthole@adultswim.com');
+
+INSERT INTO
+    table2 (Email, Name, Surname, Age)
+VALUES
+    ('rick@adultswim.com', 'Rick', 'Sanchez','70'),
+    ('morty@adultswim.com', 'Morty', 'Smith','14'),
+    ('fenix@adultswim.com', 'Fenix', 'Birdperson','40'),
+    ('beth@adultswim.com', 'Beth', 'Smith','34'),
+    ('poopybutthole@adultswim.com', 'Mister', 'Poopybutthole','99');
+
+#   - Вывести данные из первой таблицы в виде отсортированных по username данных
+SELECT * FROM table1 ORDER BY Username ASC;
+
+#   - Вывести username и age пользователей с сортировкой по age
+SELECT SORT.* FROM (SELECT Username,Age FROM table1,table2 WHERE table1.Email=table2.Email) AS SORT ORDER BY SORT.Age;
+
+#   - Вывести все данные пользователей из обеих таблиц в одном output
+SELECT * FROM table1,table2 WHERE table1.Email=table2.Email
