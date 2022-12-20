@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+
+  nginx:
+    build: ./nginx/
+    ports:
+      - "8080:80"
+
+  apache:
+    build: ./apache/
+    ports:
+      - "8081:80"
