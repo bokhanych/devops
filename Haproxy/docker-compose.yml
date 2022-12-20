@@ -4,10 +4,36 @@ services:
 
   nginx:
     build: ./nginx/
+    image: nginx_test:1
     ports:
-      - "8080:80"
+      - "8081:80"
+    container_name: my_nginx
+    restart: always
+    networks:
+      - tmsnet
 
   apache:
     build: ./apache/
+    image: apache_test:1
     ports:
-      - "8081:80"
+      - "8082:80"
+    container_name: my_apache
+    restart: always
+    networks:
+      - tmsnet
+
+  haproxy:
+    build: ./haproxy/
+    image: haproxy_test:1
+    ports:
+      - "8080:80"
+    container_name: my_haproxy
+    links:
+      - nginx
+      - apache
+    restart: always
+    networks:
+      - tmsnet
+
+networks:
+        tmsnet:
