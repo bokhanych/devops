@@ -1,0 +1,112 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  
+  "Description" : "Lesson 37: AWS_4 CloudFormation",
+  
+  "Parameters" : {
+
+    "KeyName": {
+      "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+      "Type": "AWS::EC2::KeyPair::KeyName",
+      "Default" : "bokhanych",
+      "ConstraintDescription" : "must be the name of an existing EC2 KeyPair."
+    },
+
+    "InstanceType" : {
+      "Description" : "WebServer EC2 instance type",
+      "Type" : "String",
+      "Default" : "t2.micro",
+      "AllowedValues" : [ "t2.micro"]
+    },
+
+    "SSHLocation" : {
+      "Description" : " The IP address range that can be used to SSH to the EC2 instances",
+      "Type": "String",
+      "MinLength": "9",
+      "MaxLength": "18",
+      "Default": "0.0.0.0/0",
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+    } 
+  },
+ 
+  "Mappings" : {
+    "AWSInstanceType2Arch" : {
+      "t2.micro"    : { "Arch" : "HVM64"  }
+    },
+   
+    "AWSInstanceType2NATArch" : {
+      "t2.micro"    : { "Arch" : "NATHVM64"  }
+      },
+
+    "AWSRegionArch2AMI" : {
+      "eu-central-1"     : {"HVM64" : "ami-0474863011a7d1541", "HVMG2" : "ami-0aa1822e3eb913a11"}
+    }
+},
+
+  "Resources" : {     
+    "WebServerSecurityGroup" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "Enable HTTP access via port 80 locked down to the load balancer + SSH access",
+        "SecurityGroupIngress" : [
+          {"IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : "0.0.0.0/0"},
+          {"IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : { "Ref" : "SSHLocation"}}
+        ]
+      }
+    },
+      
+    "MyInstance": {  
+    "Type": "AWS::EC2::Instance",
+          "Metadata" : {
+        "AWS::CloudFormation::Init" : {
+          "configSets" : {
+            "Install" : "Install"
+          },
+
+          "Install" : {
+            "packages" : {
+              "yum" : {
+                "git"        : []
+              }
+              }
+            }
+        }
+      },
+    "Properties": {
+      "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
+                        { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
+      "InstanceType"   : { "Ref" : "InstanceType" },
+      "SecurityGroups" : [ {"Ref" : "WebServerSecurityGroup"} ],
+      "KeyName"        : { "Ref" : "KeyName" },
+      "Tags" : [
+        {"Key" : "Name", "Value" : "bokhanych_homework"}
+      ],
+      "UserData":{
+      "Fn::Base64":{
+          "Fn::Join":[
+          "",
+          [
+              "#!/bin/bash -xe\n",
+              "yum install -y aws-cfn-bootstrap\n",
+              "# Install the files and packages from the metadata\n",
+              "/opt/aws/bin/cfn-init -v ",
+              "         --stack ",
+              {
+                  "Ref":"AWS::StackName"
+              },
+              "         --resource MyInstance ",
+              "         --configsets Install ",
+              "         --region ",
+              {
+                  "Ref":"AWS::Region"
+              },
+              "\n"
+          ]
+      ]
+      }
+  }
+    }
+    }          
+  }
+}
