@@ -1,0 +1,17 @@
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "View_and_Download",
+			"Effect": "Allow",
+			"Principal": "*",
+			"Action": "s3:GetObject",
+			"Resource": ["arn:aws:s3:::bokhanych-bucket/osi.png",
+			    "arn:aws:s3:::bokhanych-bucket/test_file"]
+		}
+	]
+}
+
+Amazon S3 > Buckets > bokhanych-bucket:
+https://bokhanych-bucket.s3.amazonaws.com/osi.png
+https://bokhanych-bucket.s3.amazonaws.com/test_file
