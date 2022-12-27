@@ -24,8 +24,6 @@ if [ $(aws s3 ls $BACKUP_STORAGE | wc -l) != 1 ];
     then
         echo "AWS backup directory is not exist! Creating new directory.."
         BACKUP_STORAGE="s3://bokhanych-bucket/backup_folder"
-        #exit
-
 fi
 
 # create archive
