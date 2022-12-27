@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# backup this directory
+DIRECTORY_FOR_BACKUP="/home/backups"
+# backup storage location
+BACKUP_STORAGE="s3://bokhanych-bucket/backups"
+# max count backup copies
+MAX_COPIES_COUNTER=5
+# date
+BACKUP_DATE=`date +%Y-%m-%d_%H:%M:%S`
+# log file
+LOG_FILE="/var/log/backups.log"
+# temp directory
+TMP_DIRECTORY="/tmp"
+
+# check LOCAL backup directory
+if [ ! -d "$DIRECTORY_FOR_BACKUP" ]; 
+    then
+        echo "LOCAL backup directory is not exist!"
+        exit
+fi
+# check AWS backup directory
+if [ $(aws s3 ls $BACKUP_STORAGE | wc -l) != 1 ]; 
+    then
+        echo "AWS backup directory is not exist! Creating new directory.."
+        BACKUP_STORAGE="s3://bokhanych-bucket/backup_folder"
+fi
+
+# create archive
+cd $DIRECTORY_FOR_BACKUP && tar -cf $TMP_DIRECTORY/backup_$BACKUP_DATE.tar *
+# copy to backup storage
+aws s3 cp $TMP_DIRECTORY/backup_$BACKUP_DATE.tar $BACKUP_STORAGE/
+# clear temp directory
+rm $TMP_DIRECTORY/backup_$BACKUP_DATE.tar
+# add log
+echo "backup_$BACKUP_DATE created" >> $LOG_FILE
+
+# backup rotation
+COPIES_COUNTER=`aws s3 ls $BACKUP_STORAGE/ | grep backup_ | wc -l`
+if [ $COPIES_COUNTER -gt $MAX_COPIES_COUNTER ]
+    then
+        NEED_TO_DELETE_COUNTER=$(($(aws s3 ls $BACKUP_STORAGE/ | wc -l)-$MAX_COPIES_COUNTER)) # how many files to delete
+        for (( i==1; i<$NEED_TO_DELETE_COUNTER; i++ ))
+            do
+                FILE_TO_DELETE=$(aws s3 ls $BACKUP_STORAGE/ | sort | head -n 1 | awk '{print $4}') # sort and delete the older file
+                aws s3 rm $BACKUP_STORAGE/$FILE_TO_DELETE
+                echo "$FILE_TO_DELETE deleted" >> $LOG_FILE
+            done
+fi
+
+#root@macron:~# bash script.sh
+#upload: ../../tmp/backup_2022-12-27_16:50:52.tar to s3://bokhanych-bucket/backups/backup_2022-12-27_16:50:52.tar
+#delete: s3://bokhanych-bucket/backups/backup_2022-12-27_15:56:38.tar
+#root@macron:~# cat /var/log/backups.log
+#backup_2022-12-27_16:50:52 created
+#backup_2022-12-27_15:56:38.tar deleted
