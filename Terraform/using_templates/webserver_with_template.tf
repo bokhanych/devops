@@ -6,7 +6,12 @@ resource "aws_instance" "webserver" {
       "Owner" = "bokhanych"
     }
     vpc_security_group_ids = [aws_security_group.webserver.id]
-    user_data = file ("user_data.sh")
+    user_data = templatefile ("user_data.tpl", {
+      first_name = "Dmitry",
+      last_name = "Bakhanko",
+      user = "Shpil",
+      roles = ["genius", "milliarder", "playboy", "filantrop"]
+    })
 }
 
 resource "aws_security_group" "webserver" {
