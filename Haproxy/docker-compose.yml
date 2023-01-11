@@ -35,21 +35,5 @@ services:
     ports:
       - "8080:443"
 
-  nginx-proxy:
-    image: nginx
-    container_name: bokhanych_nginx-proxy
-    links:
-      - nginx
-      - apache
-      - haproxy
-    restart: always
-    volumes:
-      - ./nginx-proxy/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx-proxy/index.html:/usr/share/nginx/html/index.html
-      - ./nginx-proxy/ssl/site.crt:/etc/nginx/ssl/site.crt
-      - ./nginx-proxy/ssl/site.key:/etc/nginx/ssl/site.key
-    ports:
-      - "443:443"
-
 networks:
         tmsnet:
