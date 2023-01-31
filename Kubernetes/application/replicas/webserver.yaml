@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver-replicas
+  labels:
+    app: k8s-deployment
+    owner: bokhanych
+spec: 
+  replicas: 3
+  selector:
+    matchLabels:
+      project: project_rep
+  template:
+    metadata:
+      labels:
+        project: project_rep        
+    spec:
+      containers:
+        - name: webserver-replicas
+          image: nginx:latest
+          ports:
+            - containerPort: 80
