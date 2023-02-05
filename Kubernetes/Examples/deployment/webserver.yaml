@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver-deployment
+  labels:
+    app: k8s-deployment
+    owner: bokhanych
+spec: 
+  selector:
+    matchLabels:
+      project: project_x
+  template:
+    metadata:
+      labels:
+        project: project_x        
+    spec:
+      containers:
+        - name: webserver-deployment
+          image: nginx:latest
+          ports:
+            - containerPort: 80

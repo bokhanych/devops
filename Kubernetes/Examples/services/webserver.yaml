@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver-services
+  labels:
+    app: k8s-services
+    owner: bokhanych
+spec: 
+  replicas: 3
+  selector:
+    matchLabels:
+      project: project_x
+  template:
+    metadata:
+      labels:
+        project: project_x        
+    spec:
+      containers:
+        - name: webserver-services
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: project-service
+spec:
+  selector:
+    project: project_x
+  ports:
+   - name: listener
+     protocol: TCP
+     port: 80
+     targetPort: 80
+  type: LoadBalancer

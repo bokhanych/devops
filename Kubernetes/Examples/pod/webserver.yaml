@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Pod
+metadata:
+  name: webserver-pod
+  labels:
+    app: frontend
+    owner: bokhanych
+spec: 
+  containers: 
+    - name: container-nginx
+      image: nginx:latest
+      ports:
+        - containerPort: 80
+
+    - name: container-tomcat
+      image: tomcat:latest
+      ports:
+        - containerPort: 8080
